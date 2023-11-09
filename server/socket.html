@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <h1>socket 페이지입니닷</h1>
+    <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
+    <button onclick="sendMessage()">전송</button>
+    <ul id="messages"></ul>
+
+    <!-- socket.io 모듈은 내부적으로 루트socket.io경로에 socket.io.js파일을 자동으로 등록해둔다.-->
+    <!-- socket.io모듈이 자동으로 생성해둔 루트/socket.io/socket.io.js에 접근하여 js 스크립트를 불러오는 것 -->
+    <!-- js스크립트에서 소켓 io 객체를 뽑아 클라이언트에서도 소켓 통신을 할수있게된다. -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      const socket = io();
+
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const data = messageInput.value;
+        socket.emit("note", data); // 서버로 'message' 이벤트와 함께 메시지 전송
+        messageInput.value = "";
+      }
+
+      //서버로부터 메세지 수신
+      socket.on("note", (data) => {
+        const messagesList = document.getElementById("messages");
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(data));
+        messagesList.appendChild(li);
+      });
+    </script>
+  </body>
+</html>
