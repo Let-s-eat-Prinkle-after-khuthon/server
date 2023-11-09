@@ -23,21 +23,35 @@
 
     <script>
       const socket = io();
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+      audioContext.resume();
+      socket.on("playAudio", (data) => {
+        //base64 디코딩 후 arraybuffer로 변환
+        const binaryData = atob(data);
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const byteArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+          byteArray[i] = binaryData.charCodeAt(i);
+        }
 
-      function sendMessage() {
-        const messageInput = document.getElementById("messageInput");
-        const data = messageInput.value;
-        socket.emit("note", data); // 서버로 'message' 이벤트와 함께 메시지 전송
-        messageInput.value = "";
-      }
+        audioContext.decodeAudioData(arrayBuffer, function (buffer) {
+          const source = audioContext.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioContext.destination);
+          source.start(0);
+        });
+      });
 
       //서버로부터 메세지 수신
-      socket.on("note", (data) => {
-        const messagesList = document.getElementById("messages");
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(data));
-        messagesList.appendChild(li);
-      });
+      // socket.on("note", (data) => {
+      //   const messagesList = document.getElementById("messages");
+      //   const li = document.createElement("li");
+      //   li.appendChild(document.createTextNode(data));
+      //   messagesList.appendChild(li);
+      // });
+
+      socket.on("playAudio");
     </script>
   </body>
 </html>

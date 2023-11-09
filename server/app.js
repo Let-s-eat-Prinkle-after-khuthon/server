@@ -31,10 +31,13 @@ app.get("/socket", (req, res) => {
       return;
     }
     io.emit("audio", data);
+    //이거 post요청에다가 넣어서 다시 수정할거임
     // res.send("Audio data sent to clients");
     res.sendFile(path.join(__dirname + "/socket.html"));
   });
 });
+
+app.post("/socket");
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
