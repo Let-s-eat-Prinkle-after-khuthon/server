@@ -96,6 +96,19 @@ router.post("/piano", (req, res) => {
         }
       );
       break;
+    case "B":
+      fs.readFile(
+        path.join(audioFilePath, "pianoB.mp3"),
+        { encoding: "base64" },
+        (err, data) => {
+          if (err) {
+            console.error("Error reading audio file: ", err);
+            return;
+          }
+          req.io.emit("audio", data);
+        }
+      );
+      break;
     case "C+":
       fs.readFile(
         path.join(audioFilePath, "pianoC+.mp3"),
