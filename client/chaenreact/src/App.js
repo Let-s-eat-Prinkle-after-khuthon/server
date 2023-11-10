@@ -1,15 +1,13 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Show from "./component/Show";
 import { AiFillCaretLeft, AiFillCaretRight, AiFillSound } from "react-icons/ai";
 
-function App() {
+const App = ({ socket }) => {
   //연결 확인 부분
-
-  const socket = io();
 
   const [instType, setInstType] = useState(); //소켓에서 데이터 수신
   const [sym, setSym] = useState(false);
@@ -101,7 +99,7 @@ function App() {
         <Main click={click}>
           <Box>
             <Tab>
-              PLAY MUSIC
+              Now Playing...
               <TabButton>
                 <AiFillCaretRight />
               </TabButton>
@@ -139,9 +137,13 @@ function App() {
       )}
     </Body>
   );
-}
+};
 
-export default App;
+const socket = io();
+function WrapperComponent() {
+  return <App socket={socket} />;
+}
+export default WrapperComponent;
 
 const lotation = keyframes`
 100% {
@@ -212,6 +214,7 @@ const Box = styled.div`
   border-radius: 4px;
 `;
 const Tab = styled.div`
+  font-family: "Black Ops One", sans-serif;
   background-color: #3819a0;
   min-width: 85vw;
   min-height: 8vh;

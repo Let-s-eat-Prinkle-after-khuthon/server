@@ -19,7 +19,7 @@ export default function Show({ click, setClick, musicPlay }) {
         console.log(show);
       }}
     >
-      PLAY TOGETHER!
+      악기가 없어도 괜찮아
       <Start
         show={show}
         click={click}
@@ -29,7 +29,7 @@ export default function Show({ click, setClick, musicPlay }) {
           musicPlay();
         }}
       >
-        Let's go!
+        두 손만 있다면!
       </Start>
     </Title>
   );
