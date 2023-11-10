@@ -16,9 +16,9 @@ app.use(cors());
 app.use(express.static(__dirname));
 app.use("/piano", express.static(path.join(__dirname, "../piano")));
 app.use("/inst", instRoutes); //'/inst' 경로에 대한 요청은 instRoutes 파일로 라우팅
-app.io = io;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set("io", io);
 
 io.on("connection", (socket) => {
   console.log("User connected");

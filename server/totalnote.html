@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <h1>여기에 모든 악기의 계이름들이 다 나타나줬으면 좋겠는 페이지입니다.</h1>
+
+    <ul id="messages"></ul>
+
+    <!-- socket.io 모듈은 내부적으로 루트socket.io경로에 socket.io.js파일을 자동으로 등록해둔다.-->
+    <!-- socket.io모듈이 자동으로 생성해둔 루트/socket.io/socket.io.js에 접근하여 js 스크립트를 불러오는 것 -->
+    <!-- js스크립트에서 소켓 io 객체를 뽑아 클라이언트에서도 소켓 통신을 할수있게된다. -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      const socket = io();
+
+      //서버로부터 메세지 수신
+      socket.on("note", (data) => {
+        const messagesList = document.getElementById("messages");
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(data));
+        messagesList.appendChild(li);
+      });
+    </script>
+  </body>
+</html>
