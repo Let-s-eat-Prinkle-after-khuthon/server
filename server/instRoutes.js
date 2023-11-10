@@ -113,7 +113,7 @@ router.post("/piano", (req, res) => {
       res.send("Default behavior...");
       break;
   }
-
+  req.io.emit("inst", "piano");
   res.status(200).send(req.body.note);
 });
 
@@ -155,7 +155,7 @@ router.post("/tri", (req, res) => {
       }
     );
   } else {
-    res.send("sym is not playing");
+    res.send("tri is not playing");
   }
   req.io.emit("inst", "tri");
   res.status(200).send(req.body.note);
