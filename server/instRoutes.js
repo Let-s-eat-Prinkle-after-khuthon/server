@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const path = require("path");
+const fs = require("fs");
+const audioFilePath = path.join(__dirname, "../piano", "pianoC.mp3");
 
 router.use(express.static(__dirname));
 router.use(bodyParser.json());
@@ -13,10 +15,16 @@ router.get("/", (req, res) => {
 
 router.post("/piano", (req, res) => {
   console.log(req.body.note);
+  fs.readFile(audioFilePath, { encoding: "base64" }, (err, data) => {
+    if (err) {
+      console.error("Error reading audio file: ", err);
+      return;
+    }
+    const io = req.app.get("io");
+    io.emit("audio", data);
+  });
   //py로부터 계이름 post요청을 받았으면 이제 홈url로 그에 맞는 audio파일을 보내주어야한다.
   //지금은 임시로 req.body.note를 넣어놨지만 이 자리에 audio파일 base64로 인코딩해서 보내줄 예정이다.
-  const io = req.app.get("io");
-  io.emit("note", req.body.note);
   res.status(200).send(req.body.note);
 });
 
