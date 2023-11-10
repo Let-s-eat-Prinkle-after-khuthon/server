@@ -2,11 +2,9 @@ import logo from "./logo.svg";
 import "./App.css";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
-import Piano from "./component/piano";
-import Cats from "./component/cats";
 import styled, { keyframes } from "styled-components";
 import Show from "./component/Show";
-import Tri from "./component/tri";
+
 <style>
   @import
   url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
@@ -68,7 +66,7 @@ function App() {
         // 여기에 실행하고자 하는 코드 작성
         setSym(false);
         setInstType("");
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timeoutId);
     } else if (instType === "cats") {
       setCats(true);
@@ -76,7 +74,7 @@ function App() {
         // 여기에 실행하고자 하는 코드 작성
         setCats(false);
         setInstType("");
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timeoutId);
     } else if (instType === "tri") {
       setTri(true);
@@ -84,7 +82,7 @@ function App() {
         // 여기에 실행하고자 하는 코드 작성
         setTri(false);
         setInstType("");
-      }, 3000);
+      }, 1000);
       return () => clearTimeout;
     } else if (instType === "piano") {
       setPiano(true);
@@ -92,7 +90,7 @@ function App() {
         // 여기에 실행하고자 하는 코드 작성
         setPiano(false);
         setInstType("");
-      }, 3000);
+      }, 1000);
       return () => clearTimeout;
     } else if (instType === "drum") {
       setDrum(true);
@@ -100,7 +98,7 @@ function App() {
         // 여기에 실행하고자 하는 코드 작성
         setDrum(false);
         setInstType("");
-      }, 3000);
+      }, 1000);
       return () => clearTimeout;
     }
   }, [instType]);
@@ -114,22 +112,22 @@ function App() {
           {piano ? (
             <img src="donkey.gif" style={{ width: "256px", height: "auto" }} />
           ) : (
-            <img src="donkey.png" style={{ width: "128px", height: "auto" }} />
+            <img src="donkey.png" style={{ width: "256px", height: "auto" }} />
           )}
           {sym || drum ? (
             <img src="cat.gif" style={{ width: "256px", height: "auto" }} />
           ) : (
-            <img src="cat.png" style={{ width: "128px", height: "auto" }} />
+            <img src="cat.png" style={{ width: "256px", height: "auto" }} />
           )}
           {cats ? (
             <img src="chicken.gif" style={{ width: "256px", height: "auto" }} />
           ) : (
-            <img src="chicken.png" style={{ width: "128px", height: "auto" }} />
+            <img src="chicken.png" style={{ width: "256px", height: "auto" }} />
           )}
           {tri ? (
             <img src="dog.gif" style={{ width: "256px", height: "auto" }} />
           ) : (
-            <img src="dog.png" style={{ width: "128px", height: "auto" }} />
+            <img src="dog.png" style={{ width: "256px", height: "auto" }} />
           )}
         </Main>
       )}
