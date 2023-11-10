@@ -4,15 +4,13 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Show from "./component/Show";
-
-<style>
-  @import
-  url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
-</style>;
+import { AiFillCaretLeft, AiFillCaretRight, AiFillSound } from "react-icons/ai";
 
 function App() {
   //연결 확인 부분
-  const socket = io.connect("localhost:3000/");
+
+  const socket = io();
+
   const [instType, setInstType] = useState(); //소켓에서 데이터 수신
   const [sym, setSym] = useState(false);
   const [cats, setCats] = useState(false);
@@ -20,15 +18,6 @@ function App() {
   const [drum, setDrum] = useState(false);
   const [piano, setPiano] = useState(false);
   const [click, setClick] = useState(0); //화면 전환
-  const sendMessage = (err) => {
-    //서버 연결 확인
-    if (err) {
-      alert(err);
-    } else {
-      socket.emit("send_message", "hi");
-      console.log("서버 연결 성공");
-    }
-  };
 
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -39,6 +28,7 @@ function App() {
   };
 
   useEffect(() => {
+    const socket = io();
     socket.on("audio", (data) => {
       const binaryData = atob(data);
       const arrayBuffer = new ArrayBuffer(binaryData.length);
@@ -109,26 +99,42 @@ function App() {
         <Show click={click} setClick={setClick} musicPlay={musicPlay} />
       ) : (
         <Main click={click}>
-          {piano ? (
-            <img src="donkey.gif" style={{ width: "256px", height: "auto" }} />
-          ) : (
-            <img src="donkey.png" style={{ width: "256px", height: "auto" }} />
-          )}
-          {sym || drum ? (
-            <img src="cat.gif" style={{ width: "256px", height: "auto" }} />
-          ) : (
-            <img src="cat.png" style={{ width: "256px", height: "auto" }} />
-          )}
-          {cats ? (
-            <img src="chicken.gif" style={{ width: "256px", height: "auto" }} />
-          ) : (
-            <img src="chicken.png" style={{ width: "256px", height: "auto" }} />
-          )}
-          {tri ? (
-            <img src="dog.gif" style={{ width: "256px", height: "auto" }} />
-          ) : (
-            <img src="dog.png" style={{ width: "256px", height: "auto" }} />
-          )}
+          <Box>
+            <Tab>
+              PLAY MUSIC
+              <TabButton>
+                <AiFillCaretRight />
+              </TabButton>
+              <TabButton>
+                <AiFillSound />
+              </TabButton>
+              <TabButton>
+                <AiFillCaretLeft />
+              </TabButton>
+            </Tab>
+            <Screen>
+              {cats ? (
+                <StopChi src={"/chicken.gif"}></StopChi>
+              ) : (
+                <StopChi src={"/chicken.png"}></StopChi>
+              )}
+              {sym || drum ? (
+                <StopCat src={"/cat.gif"}></StopCat>
+              ) : (
+                <StopCat src={"/cat.png"}></StopCat>
+              )}
+              {tri ? (
+                <StopDog src={"/dog.gif"}></StopDog>
+              ) : (
+                <StopDog src={"/dog.png"}></StopDog>
+              )}
+              {piano ? (
+                <StopDonk src={"/donkey.gif"}></StopDonk>
+              ) : (
+                <StopDonk src={"/donkey.png"}></StopDonk>
+              )}
+            </Screen>
+          </Box>
         </Main>
       )}
     </Body>
@@ -178,8 +184,7 @@ const Body = styled.div`
   ${(props) =>
     props.click && //primary 가 존재할 경우
     `
-      background-image: url("https://mblogthumb-phinf.pstatic.net/MjAxODExMTVfNDYg/MDAxNTQyMjcxNDAzMTYx.jD4LnEJb92PjRsPba-chqZmWBdMti-EMxuMnwubXjHog.e6DikpP8V6YbDty_44L770keXOt56grgG5fF-43bKt4g.PNG.moducampus/%EC%8A%AC%EB%9D%BC%EC%9D%B4%EB%93%9C03.png?type=w800");
-      background-size: cover; 
+      background-color: #18a8f1;
     `}
   animation: ${fade} 2s;
   overflow: hidden;
@@ -187,8 +192,8 @@ const Body = styled.div`
 
 const Logo = styled.img`
   display: block;
-  width: 300px;
-  height: 300px;
+  width: 30px;
+  height: 30px;
   animation: ${lotation} 10s linear infinite;
   transform-origin: 50% 50%;
 `;
@@ -196,4 +201,122 @@ const Logo = styled.img`
 const Main = styled.div`
   animation: ${bright} 3s;
   transition: all 3s;
+`;
+
+const Box = styled.div`
+  background-color: #ffabe4;
+  border: solid 8px #3819a0;
+  min-width: 90vw;
+  min-height: 80vh;
+  overflow: hidden;
+  border-radius: 4px;
+`;
+const Tab = styled.div`
+  background-color: #3819a0;
+  min-width: 85vw;
+  min-height: 8vh;
+  diplay: flex;
+  justify-content: space-between;
+  margin: 1%;
+  color: white;
+  line-height: 46px;
+  align-items: center;
+  overflow: hidden;
+  font-size: 35px;
+  padding-left: 20px;
+  border-radius: 4px;
+`;
+const Screen = styled.div`
+  border: solid 5px #3819a0;
+  background-color: white;
+  min-width: 85vw;
+  min-height: 70vh;
+  border-radius: 4px;
+  margin: 1.5%;
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const TabButton = styled.div`
+  width: 30px;
+  overflow: hidden;
+  max-height: 5vh;
+  margin: 0.5%;
+  text-align: center;
+  font-weight: 800;
+  color: #3819a0;
+  font-size: 20px;
+  background-color: white;
+  float: right;
+  border-radius: 4px;
+`;
+
+const move = keyframes`
+0% {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+50% {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+100% {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+}
+@keyframes pulsate-fwd {
+0% {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+50% {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+100% {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+`;
+
+const Music = styled.button`
+  min-width: 30px;
+  min-height: 30px;
+  background-color: black;
+  &:hover {
+    animation: ${move} 10s linear infinite;
+  }
+`;
+
+const StopCat = styled.img`
+  width: 15vw;
+  height: 35vh;
+  animation: ${move} 1s infinite both;
+  margin: auto;
+  padding-bottom: 20px;
+`;
+const StopChi = styled.img`
+  width: 15vw;
+  height: 35vh;
+  transform: translateY(120px);
+  animation: ${move} 1.3s infinite both;
+  margin: auto;
+  padding-top: 20px;
+`;
+const StopDog = styled.img`
+  width: 15vw;
+  height: 35vh;
+  transform: translate(0px, 40px);
+  animation: ${move} 1.3s infinite both;
+  margin: auto;
+  padding-bottom: 20px;
+`;
+const StopDonk = styled.img`
+  width: 15vw;
+  height: 35vh;
+  transform: translate(0px, 120px);
+  animation: ${move} 1s infinite both;
+  margin: auto;
+  padding-top: 20px;
 `;
