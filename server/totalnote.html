@@ -13,6 +13,7 @@
   <body>
     <h1>여기에 모든 악기의 계이름들이 다 나타나줬으면 좋겠는 페이지입니다.</h1>
 
+    <button>합주시작</button>
     <ul id="messages"></ul>
 
     <!-- socket.io 모듈은 내부적으로 루트socket.io경로에 socket.io.js파일을 자동으로 등록해둔다.-->
@@ -21,7 +22,32 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
+      const btn = document.querySelector("button");
+
       const socket = io();
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      btn.addEventListener("click", () => {
+        audioContext.resume().then(() => console.log(audioContext.state));
+      });
+
+      socket.on("audio", (data) => {
+        //base64 디코딩 후 arraybuffer로 변환
+        const binaryData = atob(data);
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const byteArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+          byteArray[i] = binaryData.charCodeAt(i);
+        }
+
+        audioContext.decodeAudioData(arrayBuffer, function (buffer) {
+          const source = audioContext.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioContext.destination);
+          source.start(0);
+        });
+      });
 
       //서버로부터 메세지 수신
       socket.on("note", (data) => {
