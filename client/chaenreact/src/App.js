@@ -37,14 +37,25 @@ function App() {
     });
     console.log(instType);
     if (instType === "sym") {
-      console.log(instType);
-      console.log("instType sym일때 동작");
       setSym(true);
-      //여기다가 symB 컴포넌트 마운트
+      const timeoutId = setTimeout(() => {
+        // 여기에 실행하고자 하는 코드 작성
+        setSym(false);
+      }, 4000);
+
+      // 컴포넌트가 언마운트되면 타이머 정리
+      return () => clearTimeout(timeoutId);
     } else if (instType === "cats") {
       console.log(instType);
       console.log("instType이 cats일때 동작");
       setCats(true);
+      const timeoutId = setTimeout(() => {
+        // 여기에 실행하고자 하는 코드 작성
+        setCats(false);
+      }, 3000);
+
+      // 컴포넌트가 언마운트되면 타이머 정리
+      return () => clearTimeout(timeoutId);
     }
   }, [instType]);
 
@@ -63,7 +74,11 @@ function App() {
       </button>
 
       {sym && <Sym />}
-      {cats && <Cats />}
+      {cats ? (
+        <Cats />
+      ) : (
+        <img src="image.png" style={{ width: "100px", height: "auto" }} />
+      )}
     </div>
   );
 }

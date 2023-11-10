@@ -83,6 +83,19 @@ router.post("/piano", (req, res) => {
         }
       );
       break;
+    case "A":
+      fs.readFile(
+        path.join(audioFilePath, "pianoA.mp3"),
+        { encoding: "base64" },
+        (err, data) => {
+          if (err) {
+            console.error("Error reading audio file: ", err);
+            return;
+          }
+          req.io.emit("audio", data);
+        }
+      );
+      break;
     case "C+":
       fs.readFile(
         path.join(audioFilePath, "pianoC+.mp3"),
@@ -122,6 +135,7 @@ router.post("/sym", (req, res) => {
   } else {
     res.send("sym is not playing");
   }
+  req.io.emit("inst", "sym");
   res.status(200).send(req.body.note);
 });
 
@@ -130,7 +144,7 @@ router.post("/tri", (req, res) => {
   const note = req.body.note;
   if (note === "O") {
     fs.readFile(
-      path.join(audioFilePath, "sym.mp3"),
+      path.join(audioFilePath, "tri.mp3"),
       { encoding: "base64" },
       (err, data) => {
         if (err) {
@@ -143,6 +157,7 @@ router.post("/tri", (req, res) => {
   } else {
     res.send("sym is not playing");
   }
+  req.io.emit("inst", "tri");
   res.status(200).send(req.body.note);
 });
 
@@ -162,8 +177,53 @@ router.post("/cats", (req, res) => {
       }
     );
   } else {
-    res.send("sym is not playing");
+    res.send("cats is not playing");
   }
+  req.io.emit("inst", "cats");
+  res.status(200).send(req.body.note);
+});
+
+router.post("/drum1", (req, res) => {
+  console.log(req.body.note);
+  const note = req.body.note;
+  if (note === "O") {
+    fs.readFile(
+      path.join(audioFilePath, "drum1.mp3"),
+      { encoding: "base64" },
+      (err, data) => {
+        if (err) {
+          console.error("Error reading audio file: ", err);
+          return;
+        }
+        req.io.emit("audio", data);
+      }
+    );
+  } else {
+    res.send("drum is not playing");
+  }
+  req.io.emit("inst", "drum");
+  res.status(200).send(req.body.note);
+});
+
+router.post("/drum2", (req, res) => {
+  console.log(req.body.note);
+  const note = req.body.note;
+  if (note === "O") {
+    fs.readFile(
+      path.join(audioFilePath, "drum2.mp3"),
+      { encoding: "base64" },
+      (err, data) => {
+        if (err) {
+          console.error("Error reading audio file: ", err);
+          return;
+        }
+        req.io.emit("audio", data);
+      }
+    );
+  } else {
+    res.send("drum is not playing");
+  }
+  req.io.emit("inst", "drum");
   res.status(200).send(req.body.note);
 });
 

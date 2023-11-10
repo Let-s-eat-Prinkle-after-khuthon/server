@@ -51,10 +51,7 @@
 
       //서버로부터 메세지 수신
       socket.on("note", (data) => {
-        const messagesList = document.getElementById("messages");
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(data));
-        messagesList.appendChild(li);
+        console.log(data);
       });
     </script>
   </body>
