@@ -2,19 +2,15 @@ import logo from "./logo.svg";
 import "./App.css";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
+import Sym from "./sym";
+import Cats from "./cats";
 
 function App() {
   //연결 확인 부분
-  const socket = io.connect();
-  const [audio, setAudio] = useState(); //소켓에서 데이터 수신
-  const sendMessage = (err) => {
-    if (err) {
-      alert(err);
-    } else {
-      socket.emit("send_message", "hi");
-      console.log("서버 연결 성공");
-    }
-  };
+  const socket = io.connect("localhost:3000/");
+  const [instType, setInstType] = useState(); //소켓에서 데이터 수신
+  const [sym, setSym] = useState(false);
+  const [cats, setCats] = useState(false);
 
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -35,16 +31,27 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    socket.on("inst", (data) => {
+      setInstType(data);
+    });
+    console.log(instType);
+    if (instType === "sym") {
+      console.log(instType);
+      console.log("instType sym일때 동작");
+      setSym(true);
+      //여기다가 symB 컴포넌트 마운트
+    } else if (instType === "cats") {
+      console.log(instType);
+      console.log("instType이 cats일때 동작");
+      setCats(true);
+    }
+  }, [instType]);
+
   return (
     <div className="App">
-      <h1>피아노 페이지입니다</h1>
-      <button
-        onClick={() => {
-          sendMessage();
-        }}
-      >
-        서버 연결 확인
-      </button>
+      <h1>오케스트라 페이지입니다.</h1>
+
       <button
         onClick={() => {
           audioContext.resume().then(() => {
@@ -54,6 +61,9 @@ function App() {
       >
         합주시작
       </button>
+
+      {sym && <Sym />}
+      {cats && <Cats />}
     </div>
   );
 }
