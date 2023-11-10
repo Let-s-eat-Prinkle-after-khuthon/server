@@ -9,12 +9,14 @@ const io = socketIo(server);
 const path = require("path");
 const fs = require("fs");
 const audioFilePath = path.join(__dirname, "../piano", "pianoC.mp3");
+const instRoutes = require("./instRoutes.js");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(__dirname));
 app.use("/piano", express.static(path.join(__dirname, "../piano")));
+app.use("/inst", instRoutes); //'/inst' 경로에 대한 요청은 instRoutes 파일로 라우팅
 
 io.on("connection", (socket) => {
   console.log("User connected");
@@ -36,8 +38,6 @@ app.get("/socket", (req, res) => {
     res.sendFile(path.join(__dirname + "/socket.html"));
   });
 });
-
-app.post("/socket");
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
